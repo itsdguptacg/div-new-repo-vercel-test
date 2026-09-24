@@ -1,584 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TimeCurrency Market & Credit</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-                    colors: {
-                        system: { 950: '#05070a', 900: '#0c0f16', 800: '#141a25', 700: '#1e2837', accent: '#3b82f6', danger: '#ef4444', success: '#10b981', warning: '#f59e0b' }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        html, body { height: 100%; overflow: hidden; background: #05070a; color: #e2e8f0; -webkit-tap-highlight-color: transparent; }
-        .glass-panel { background: rgba(20, 26, 37, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .fade-in { animation: fadeIn 0.2s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .cal-day { aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; font-size: 0.75rem; transition: all 0.2s; position: relative; }
-        .cal-day.active { background: #3b82f6; color: white; }
-        .cal-dot { width: 4px; height: 4px; border-radius: 50%; background: #ef4444; position: absolute; bottom: 4px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="flex flex-col h-full font-sans">
 
-    <header class="h-16 border-b border-system-800 bg-system-900 flex items-center justify-between px-5 shrink-0 z-30">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-system-accent to-blue-700 flex items-center justify-center text-white shadow-lg shadow-blue-900/20">
-                <i class="fa-solid fa-vault"></i>
+<body>
+
+    <div class="container">
+        <header class="navbar">
+            <div class="logo">travel.</div>
+            <div class="sub-title">CARD SLIDER FOR WORDPRESS</div>
+            <nav class="nav-links">
+                <a href="#">ABOUT</a>
+                <a href="#">CONTACT</a>
+            </nav>
+        </header>
+
+        <main class="content">
+
+            
+            <section class="slider-section">
+                <div class="card-container">
+
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1641128324972-af3212f0f6bd?auto=format&fit=crop&w=600&q=80"
+                            alt="Cappadocia">
+                        <div class="card-overlay">
+                            <h3>Cappadocia</h3>
+                            <p><i class="fa-solid fa-location-dot"></i> TURKEY</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80"
+                            alt="Santorini">
+                        <div class="card-overlay">
+                            <h3>Santorini</h3>
+                            <p><i class="fa-solid fa-location-dot"></i> GREECE</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80"
+                            alt="Bali">
+                        <div class="card-overlay">
+                            <h3>Bali</h3>
+                            <p><i class="fa-solid fa-location-dot"></i> INDONESIA</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
             </div>
-            <h1 class="font-bold text-base tracking-tight">TimeCurrency</h1>
-        </div>
-        <div class="flex items-center gap-2">
-            <div class="flex items-center gap-2 bg-system-800 px-3 py-1.5 rounded-full border border-system-700">
-                <i class="fa-solid fa-coins text-system-warning text-xs"></i>
-                <span id="wallet-balance" class="font-mono font-bold text-sm">0.00</span>
+
+            <div class="footer-center">
+                <span>UNIQUE DESTINATIONS</span>
             </div>
-            <button onclick="openSettings()" class="text-slate-500 hover:text-white p-2"><i class="fa-solid fa-sliders"></i></button>
-        </div>
-    </header>
 
-    <main id="app-content" class="flex-1 overflow-y-auto bg-system-950 p-5 pb-24 no-scrollbar"></main>
-
-    <nav class="h-18 border-t border-system-800 bg-system-900 flex justify-around items-center shrink-0 pb-safe z-30">
-        <button onclick="switchView('log')" class="nav-btn flex flex-col items-center gap-1 w-full text-system-accent" id="nav-log">
-            <i class="fa-solid fa-stopwatch text-xl"></i>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Log</span>
-        </button>
-        <button onclick="switchView('calendar')" class="nav-btn flex flex-col items-center gap-1 w-full text-slate-500" id="nav-calendar">
-            <i class="fa-solid fa-calendar-days text-xl"></i>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Calendar</span>
-        </button>
-        <button onclick="switchView('market')" class="nav-btn flex flex-col items-center gap-1 w-full text-slate-500" id="nav-market">
-            <i class="fa-solid fa-shop text-xl"></i>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Market</span>
-        </button>
-        <button onclick="switchView('credit')" class="nav-btn flex flex-col items-center gap-1 w-full text-slate-500" id="nav-credit">
-            <i class="fa-solid fa-landmark text-xl"></i>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Credit</span>
-        </button>
-    </nav>
-
-    <div id="modal-overlay" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 transition-opacity">
-        <div id="modal-card" class="bg-system-900 w-full max-w-sm rounded-3xl border border-system-700 shadow-2xl overflow-hidden fade-in"></div>
+            <div class="footer-controls">
+                <span class="pagination">01 / 03</span>
+                <div class="arrow-buttons">
+                    <button class="btn-arrow" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="btn-arrow" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <script>
-        const STORAGE_KEY = 'TC_MARKET_CREDIT_V3';
-        const todayStr = new Date().toISOString().slice(0, 10);
-        
-        let state = {
-            wallet: 10,
-            debt: 0,
-            selectedDate: todayStr,
-            calYear: new Date().getFullYear(),
-            calMonth: new Date().getMonth(),
-            settings: { 
-                loanInterest: 10,
-                dailyInterest: 5
-            },
-            items: [
-                { id: '1', name: 'Focus Work', rate: 0.5, finePercent: 0 },
-                { id: '2', name: 'Entertainment', rate: -1.0, finePercent: 15 },
-                { id: '3', name: 'Exercise', rate: 0.3, finePercent: 0 }
-            ],
-            history: [] 
-        };
 
-        function save() { 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
-            const balanceEl = document.getElementById('wallet-balance');
-            if (balanceEl) balanceEl.textContent = state.wallet.toFixed(2);
-        }
 
-        function load() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            if (data) state = JSON.parse(data);
-            if (!state.selectedDate) state.selectedDate = todayStr;
-            switchView('log');
-            save();
-        }
 
-        function switchView(view) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('text-system-accent', 'text-slate-500'));
-            const active = document.getElementById(`nav-${view}`);
-            if(active) active.classList.replace('text-slate-500', 'text-system-accent');
-            
-            const main = document.getElementById('app-content');
-            main.innerHTML = '';
 
-            if (view === 'log') {
-                const dayHistory = state.history.filter(h => h.date === state.selectedDate);
-                main.innerHTML = `
-                    <div class="space-y-6 fade-in">
-                        <div class="flex items-center justify-between bg-system-800 p-4 rounded-2xl border border-system-700">
-                            <div class="flex items-center gap-3">
-                                <div class="bg-system-accent/20 p-2 rounded-lg text-system-accent">
-                                    <i class="fa-solid fa-calendar-day"></i>
-                                </div>
-                                <div>
-                                    <div class="text-[10px] font-bold text-slate-500 uppercase">Active Ledger Date</div>
-                                    <div class="text-white font-bold">${new Date(state.selectedDate).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                                </div>
-                            </div>
-                            ${state.selectedDate !== todayStr ? `<button onclick="state.selectedDate='${todayStr}'; switchView('log')" class="text-[10px] bg-system-accent text-white px-2 py-1 rounded">Today</button>` : ''}
-                        </div>
 
-                        <div class="glass-panel p-6 rounded-3xl space-y-5">
-                            <div class="flex justify-between items-center">
-                                <h2 class="font-bold text-lg text-white">Record Activity</h2>
-                                <button onclick="openFineModal()" class="text-system-danger border border-system-danger/30 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Manual Fine</button>
-                            </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1.5 ml-1">Type</label>
-                                    <select id="log-item" class="w-full bg-system-950 border border-system-700 rounded-2xl p-4 text-sm text-white focus:ring-2 ring-system-accent/50">
-                                        ${state.items.map(i => `<option value="${i.id}">${i.name} (${i.rate > 0 ? '+' : ''}${i.rate}c/m)</option>`).join('')}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="text-[10px] font-bold text-slate-500 uppercase block mb-1.5 ml-1">Time (Minutes)</label>
-                                    <input type="number" id="log-mins" placeholder="0" class="w-full bg-system-950 border border-system-700 rounded-2xl p-4 text-white font-mono text-lg">
-                                </div>
-                                <button onclick="executeLog()" class="w-full bg-system-accent text-white font-bold py-4 rounded-2xl shadow-xl active:scale-95 transition-all">Submit Entry</button>
-                            </div>
-                        </div>
 
-                        <div class="space-y-4">
-                            <h2 class="font-bold text-lg text-white px-2">Daily Ledger</h2>
-                            <div class="space-y-2">
-                                ${dayHistory.length === 0 ? '<div class="text-center py-10 text-slate-600 text-sm">No entries for this date.</div>' : ''}
-                                ${dayHistory.slice().reverse().map(h => `
-                                    <div class="bg-system-800/40 p-4 rounded-2xl border border-system-700 flex justify-between items-center">
-                                        <div class="flex flex-col">
-                                            <span class="font-bold text-sm text-slate-200">${h.label}</span>
-                                            <span class="text-[10px] text-slate-500 font-mono">${h.time} ${h.mins ? '• ' + h.mins + 'm' : ''}</span>
-                                        </div>
-                                        <div class="flex items-center gap-3">
-                                            <div class="font-mono font-bold ${h.delta >= 0 ? 'text-system-success' : 'text-system-danger'}">
-                                                ${h.delta >= 0 ? '+' : ''}${h.delta.toFixed(2)}
-                                            </div>
-                                            <button onclick="openEditLogModal('${h.id}')" class="text-slate-600 hover:text-white p-1"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
 
-            if (view === 'calendar') {
-                main.innerHTML = renderCalendar();
-            }
 
-            if (view === 'market') {
-                main.innerHTML = `
-                    <div class="space-y-4 fade-in">
-                        <div class="flex justify-between items-center px-2">
-                            <h2 class="font-bold text-lg text-white">Item Rates</h2>
-                            <button onclick="openItemModal()" class="bg-system-accent/10 text-system-accent px-4 py-2 rounded-full text-xs font-bold border border-system-accent/20">+ Create</button>
-                        </div>
-                        <div class="space-y-3">
-                            ${state.items.map(item => `
-                                <div class="bg-system-800 p-4 rounded-2xl border border-system-700 flex justify-between items-center">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-xl flex items-center justify-center ${item.rate >= 0 ? 'bg-system-success/10 text-system-success' : 'bg-system-danger/10 text-system-danger'}">
-                                            <i class="fa-solid ${item.rate >= 0 ? 'fa-arrow-up-right-dots' : 'fa-couch'}"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-bold text-white text-sm">${item.name}</div>
-                                            <div class="text-[11px] font-mono ${item.rate >= 0 ? 'text-system-success' : 'text-system-danger'}">
-                                                ${item.rate >= 0 ? 'Earn' : 'Cost'}: ${item.rate}c/m
-                                            </div>
-                                            ${item.rate < 0 ? `<div class="text-[9px] text-slate-500">Fine: ${item.finePercent}%</div>` : ''}
-                                        </div>
-                                    </div>
-                                    <button onclick="openItemModal('${item.id}')" class="text-slate-500 p-2"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
 
-            if (view === 'credit') {
-                main.innerHTML = `
-                    <div class="space-y-6 fade-in">
-                        <div class="bg-gradient-to-br from-indigo-900/40 to-system-950 p-6 rounded-3xl border border-indigo-500/20 text-center">
-                            <div class="text-[10px] uppercase font-bold text-indigo-400 mb-1">Total Outstanding Loan</div>
-                            <div class="text-4xl font-mono font-bold text-white mb-4">${state.debt.toFixed(2)}c</div>
-                            <div class="flex gap-2">
-                                <button onclick="openLoanModal()" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm">Take Loan</button>
-                                <button onclick="openPaybackModal()" class="flex-1 border border-indigo-600 text-indigo-400 py-3 rounded-xl font-bold text-sm">Repay</button>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-system-800 p-5 rounded-3xl border border-system-700 space-y-4">
-                            <h3 class="text-xs font-bold text-slate-400 uppercase mb-2">Daily Management</h3>
-                            <button onclick="carryOverDay()" class="w-full bg-system-warning/10 border border-system-warning/20 text-system-warning py-3 rounded-xl font-bold text-xs uppercase tracking-widest">
-                                Trigger Daily Carryover (${state.settings.dailyInterest}% Interest)
-                            </button>
-                            <div class="text-[10px] text-slate-500 text-center">Carryover interest applies to existing debt at the end of the day.</div>
-                        </div>
-                    </div>
-                `;
-            }
-        }
 
-        // --- CALENDAR LOGIC ---
 
-        function renderCalendar() {
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const firstDay = new Date(state.calYear, state.calMonth, 1).getDay();
-            const totalDays = new Date(state.calYear, state.calMonth + 1, 0).getDate();
-            
-            let html = `
-                <div class="space-y-4 fade-in">
-                    <div class="flex justify-between items-center bg-system-800 p-4 rounded-2xl border border-system-700">
-                        <button onclick="changeMonth(-1)" class="p-2 text-slate-400"><i class="fa-solid fa-chevron-left"></i></button>
-                        <h2 class="font-bold text-white">${monthNames[state.calMonth]} ${state.calYear}</h2>
-                        <button onclick="changeMonth(1)" class="p-2 text-slate-400"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-                    <div class="grid grid-cols-7 gap-2">
-                        ${['S','M','T','W','T','F','S'].map(d => `<div class="text-center text-[10px] font-bold text-slate-600 pb-2">${d}</div>`).join('')}
-                        ${Array(firstDay).fill(0).map(() => `<div></div>`).join('')}
-                        ${Array(totalDays).fill(0).map((_, i) => {
-                            const d = i + 1;
-                            const dateStr = `${state.calYear}-${String(state.calMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            const isToday = dateStr === todayStr;
-                            const isActive = dateStr === state.selectedDate;
-                            const daySum = state.history.filter(h => h.date === dateStr).reduce((acc, curr) => acc + curr.delta, 0);
-                            const hasFine = daySum < 0;
 
-                            return `
-                                <div onclick="selectDate('${dateStr}')" class="cal-day cursor-pointer ${isActive ? 'bg-system-accent text-white' : 'bg-system-800 text-slate-300 border border-system-700'} ${isToday && !isActive ? 'ring-1 ring-system-accent/50' : ''}">
-                                    ${d}
-                                    ${hasFine ? '<div class="cal-dot"></div>' : ''}
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-            return html;
-        }
 
-        function changeMonth(dir) {
-            state.calMonth += dir;
-            if (state.calMonth < 0) { state.calMonth = 11; state.calYear--; }
-            if (state.calMonth > 11) { state.calMonth = 0; state.calYear++; }
-            switchView('calendar');
-        }
 
-        function selectDate(dateStr) {
-            state.selectedDate = dateStr;
-            switchView('log');
-        }
-
-        // --- CORE LOGIC ---
-
-        function executeLog() {
-            const itemId = document.getElementById('log-item').value;
-            const mins = parseInt(document.getElementById('log-mins').value || 0);
-            if (mins <= 0) return;
-
-            const item = state.items.find(i => i.id === itemId);
-            const rawDelta = mins * item.rate;
-
-            let finalDelta = rawDelta;
-            if (rawDelta < 0) {
-                const cost = Math.abs(rawDelta);
-                if (cost > state.wallet) {
-                    const coveredByWallet = Math.max(0, state.wallet);
-                    const deficit = cost - coveredByWallet;
-                    const fineAmount = deficit * (item.finePercent / 100);
-                    finalDelta = -(coveredByWallet + deficit + fineAmount);
-                }
-            }
-
-            state.wallet += finalDelta;
-            addHistory(item.name, finalDelta, mins);
-
-            save();
-            document.getElementById('log-mins').value = '';
-            switchView('log');
-        }
-
-        function addHistory(label, delta, mins = null) {
-            state.history.push({
-                id: Date.now().toString(),
-                date: state.selectedDate,
-                label, delta, mins,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            });
-        }
-
-        // --- EDITING ---
-
-        function openEditLogModal(id) {
-            const entry = state.history.find(h => h.id === id);
-            showModal(`
-                <div class="p-6 space-y-5">
-                    <h3 class="font-bold text-white">Edit Record</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="e-label" value="${entry.label}" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white">
-                        <div>
-                            <label class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Delta (Coins)</label>
-                            <input type="number" step="0.01" id="e-delta" value="${entry.delta}" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white font-mono">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Time (Mins)</label>
-                            <input type="number" id="e-mins" value="${entry.mins || 0}" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white font-mono">
-                        </div>
-                    </div>
-                    <div class="flex gap-2 pt-2">
-                        <button onclick="updateLog('${id}')" class="flex-1 bg-system-accent py-3 rounded-xl font-bold text-sm">Update</button>
-                        <button onclick="requestSafeDelete('entry', '${id}')" class="flex-1 bg-system-danger py-3 rounded-xl font-bold text-sm">Delete</button>
-                    </div>
-                    <button onclick="closeModal()" class="w-full text-slate-500 text-xs py-2">Cancel</button>
-                </div>
-            `);
-        }
-
-        function updateLog(id) {
-            const idx = state.history.findIndex(h => h.id === id);
-            const newDelta = parseFloat(document.getElementById('e-delta').value);
-            state.wallet -= state.history[idx].delta;
-            state.wallet += newDelta;
-            state.history[idx].label = document.getElementById('e-label').value;
-            state.history[idx].delta = newDelta;
-            state.history[idx].mins = parseInt(document.getElementById('e-mins').value);
-            save(); closeModal(); switchView('log');
-        }
-
-        function openItemModal(id = null) {
-            const isNew = id === null;
-            const item = !isNew ? state.items.find(i => i.id === id) : { name: '', rate: 0.5, finePercent: 0 };
-            showModal(`
-                <div class="p-6 space-y-5">
-                    <h3 class="font-bold text-lg text-white">${isNew ? 'New Market Item' : 'Update Item'}</h3>
-                    <div class="space-y-4">
-                        <input type="text" id="m-name" value="${item.name}" placeholder="Name" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white">
-                        <input type="number" step="0.01" id="m-rate" value="${item.rate}" placeholder="Rate (+ Earn / - Cost)" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white font-mono">
-                        <div id="fine-container" class="${item.rate >= 0 ? 'hidden' : ''}">
-                            <label class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Overdraft Fine %</label>
-                            <input type="number" id="m-fine" value="${item.finePercent}" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white font-mono">
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="closeModal()" class="flex-1 bg-system-800 py-3 rounded-xl font-bold text-sm">Cancel</button>
-                        <button onclick="saveItem('${id}')" class="flex-1 bg-system-accent py-3 rounded-xl font-bold text-sm">Save</button>
-                    </div>
-                    ${!isNew ? `<button onclick="requestSafeDelete('activity', '${id}')" class="w-full text-system-danger text-[10px] font-bold mt-2 uppercase">Delete Activity</button>` : ''}
-                </div>
-            `);
-            const rateInput = document.getElementById('m-rate');
-            if(rateInput) rateInput.oninput = (e) => document.getElementById('fine-container').classList.toggle('hidden', parseFloat(e.target.value) >= 0);
-        }
-
-        function saveItem(id) {
-            const name = document.getElementById('m-name').value;
-            const rate = parseFloat(document.getElementById('m-rate').value);
-            const finePercent = parseFloat(document.getElementById('m-fine')?.value || 0);
-            if (!name) return;
-            if (id !== 'null') {
-                const idx = state.items.findIndex(i => i.id === id);
-                state.items[idx] = { ...state.items[idx], name, rate, finePercent };
-            } else {
-                state.items.push({ id: Date.now().toString(), name, rate, finePercent });
-            }
-            save(); closeModal(); switchView('market');
-        }
-
-        // --- SAFE DELETION ---
-
-        function requestSafeDelete(type, id = null) {
-            let message = "Are you sure you want to delete this?";
-            let action = () => {};
-
-            if (type === 'entry') {
-                message = "Remove this specific transaction? Wallet balance will be adjusted.";
-                action = () => {
-                    const idx = state.history.findIndex(h => h.id === id);
-                    state.wallet -= state.history[idx].delta;
-                    state.history.splice(idx, 1);
-                    save(); closeModal(); switchView('log');
-                };
-            } else if (type === 'activity') {
-                message = "Delete this activity from the market? Existing log entries will not be affected.";
-                action = () => {
-                    state.items = state.items.filter(i => i.id !== id);
-                    save(); closeModal(); switchView('market');
-                };
-            } else if (type === 'today') {
-                message = `Wipe ALL data for ${state.selectedDate}? Wallet will be adjusted.`;
-                action = () => {
-                    state.history.filter(h => h.date === state.selectedDate).forEach(h => state.wallet -= h.delta);
-                    state.history = state.history.filter(h => h.date !== state.selectedDate);
-                    save(); closeModal(); switchView('log');
-                };
-            } else if (type === 'all') {
-                message = "CRITICAL: Delete ALL history across ALL dates?";
-                action = () => {
-                    state.history = []; state.wallet = 10; state.debt = 0;
-                    save(); closeModal(); switchView('log');
-                };
-            }
-
-            showModal(`
-                <div class="p-6 text-center space-y-5">
-                    <div class="w-16 h-16 bg-system-danger/10 text-system-danger rounded-full flex items-center justify-center mx-auto"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
-                    <h3 class="font-bold text-white text-lg">Confirm Delete</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">${message}</p>
-                    <div class="flex flex-col gap-2">
-                        <button id="confirm-del-btn" class="bg-system-danger py-4 rounded-xl font-bold uppercase tracking-widest text-xs">Confirm</button>
-                        <button onclick="closeModal()" class="py-3 text-slate-500 text-xs font-bold">Cancel</button>
-                    </div>
-                </div>
-            `);
-            document.getElementById('confirm-del-btn').onclick = action;
-        }
-
-        // --- OTHER UTILS ---
-
-        function openLoanModal() {
-            showModal(`
-                <div class="p-6 space-y-5">
-                    <h3 class="font-bold text-white">Borrow Coins</h3>
-                    <input type="number" id="l-amount" placeholder="Amount" class="w-full bg-system-950 border border-system-700 rounded-xl p-4 text-white font-mono">
-                    <button onclick="takeLoan()" class="w-full bg-indigo-600 py-4 rounded-xl font-bold">Confirm Loan</button>
-                    <button onclick="closeModal()" class="w-full text-slate-500 text-xs py-2">Cancel</button>
-                </div>
-            `);
-        }
-
-        function takeLoan() {
-            const amount = parseFloat(document.getElementById('l-amount').value || 0);
-            if (amount <= 0) return;
-            const interest = amount * (state.settings.loanInterest / 100);
-            state.wallet += amount; state.debt += (amount + interest);
-            addHistory("Loan Received", amount); addHistory("Loan Fee", -interest);
-            save(); closeModal(); switchView('credit');
-        }
-
-        function openPaybackModal() {
-            showModal(`
-                <div class="p-6 space-y-5">
-                    <h3 class="font-bold text-white">Repay Credit</h3>
-                    <input type="number" id="p-amount" placeholder="Payment" class="w-full bg-system-950 border border-system-700 rounded-xl p-4 text-white font-mono">
-                    <button onclick="repayLoan()" class="w-full bg-system-success text-black py-4 rounded-xl font-bold">Pay Back</button>
-                    <button onclick="closeModal()" class="w-full text-slate-500 text-xs py-2">Cancel</button>
-                </div>
-            `);
-        }
-
-        function repayLoan() {
-            const amount = parseFloat(document.getElementById('p-amount').value || 0);
-            if (amount <= 0 || amount > state.wallet || amount > state.debt) return;
-            state.wallet -= amount; state.debt -= amount;
-            addHistory("Debt Repayment", -amount);
-            save(); closeModal(); switchView('credit');
-        }
-
-        function openFineModal() {
-            showModal(`
-                <div class="p-6 space-y-5">
-                    <h3 class="font-bold text-system-danger">Manual Fine</h3>
-                    <input type="text" id="f-reason" placeholder="Reason" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white">
-                    <input type="number" id="f-amount" placeholder="Coins" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white font-mono">
-                    <button onclick="applyFine()" class="w-full bg-system-danger text-white py-4 rounded-xl font-bold">Apply Fine</button>
-                    <button onclick="closeModal()" class="w-full text-slate-500 text-xs py-2">Cancel</button>
-                </div>
-            `);
-        }
-
-        function applyFine() {
-            const amount = parseFloat(document.getElementById('f-amount').value || 0);
-            if (amount <= 0) return;
-            state.wallet -= amount; addHistory(`Fine: ${document.getElementById('f-reason').value || "Fine"}`, -amount);
-            save(); closeModal(); switchView('log');
-        }
-
-        function carryOverDay() {
-            if (state.debt > 0) {
-                const interest = state.debt * (state.settings.dailyInterest / 100);
-                state.debt += interest; addHistory("Daily Debt Fee", -interest);
-                save(); switchView('credit');
-            }
-        }
-
-        function openSettings() {
-            showModal(`
-                <div class="p-6 space-y-6 max-h-[80vh] overflow-y-auto no-scrollbar">
-                    <h3 class="font-bold text-white text-lg">Control Panel</h3>
-                    <div class="space-y-4">
-                        <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-system-700 pb-1">Interest Settings</h4>
-                        <input type="number" id="s-loan" value="${state.settings.loanInterest}" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white">
-                        <input type="number" id="s-daily" value="${state.settings.dailyInterest}" class="w-full bg-system-950 border border-system-700 rounded-xl p-3 text-white">
-                    </div>
-                    <div class="space-y-3">
-                        <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-system-700 pb-1">Data Portability</h4>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="exportData('all')" class="bg-system-800 border border-system-700 text-white text-[10px] py-2 rounded-lg font-bold uppercase">Export All</button>
-                            <button onclick="importTrigger('all')" class="bg-system-800 border border-system-700 text-white text-[10px] py-2 rounded-lg font-bold uppercase">Import All</button>
-                            <button onclick="exportData('date')" class="bg-system-800 border border-system-700 text-system-accent text-[10px] py-2 rounded-lg font-bold uppercase">Export Date</button>
-                            <button onclick="importTrigger('date')" class="bg-system-800 border border-system-700 text-system-accent text-[10px] py-2 rounded-lg font-bold uppercase">Import Date</button>
-                        </div>
-                        <input type="file" id="import-file" class="hidden" onchange="handleImport(this)">
-                    </div>
-                    <div class="space-y-2 pt-4">
-                        <h4 class="text-[10px] font-bold text-system-danger uppercase tracking-widest border-b border-system-danger/20 pb-1">Destructive</h4>
-                        <button onclick="requestSafeDelete('today')" class="w-full border border-system-danger/30 text-system-danger py-3 rounded-xl text-xs font-bold uppercase">Wipe ${state.selectedDate}</button>
-                        <button onclick="requestSafeDelete('all')" class="w-full bg-system-danger/10 text-system-danger py-3 rounded-xl text-xs font-bold uppercase">Factory Reset History</button>
-                    </div>
-                    <button onclick="saveSettings(); closeModal()" class="w-full bg-white text-black py-4 rounded-xl font-bold mt-4 shadow-xl">Apply</button>
-                </div>
-            `);
-        }
-
-        function saveSettings() {
-            state.settings.loanInterest = parseFloat(document.getElementById('s-loan').value);
-            state.settings.dailyInterest = parseFloat(document.getElementById('s-daily').value);
-            save();
-        }
-
-        let importType = 'all';
-        function importTrigger(type) { importType = type; document.getElementById('import-file').click(); }
-
-        function exportData(type) {
-            const data = type === 'all' ? state : state.history.filter(h => h.date === state.selectedDate);
-            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `TC_${type}_${todayStr}.json`; a.click();
-        }
-
-        function handleImport(input) {
-            const file = input.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (importType === 'all') { state = imported; save(); location.reload(); }
-                    else { state.history = [...state.history.filter(h => h.date !== state.selectedDate), ...imported]; save(); switchView('log'); }
-                } catch (err) { alert("Invalid file."); }
-            };
-            reader.readAsText(file);
-        }
-
-        function showModal(html) { const overlay = document.getElementById('modal-overlay'); const card = document.getElementById('modal-card'); card.innerHTML = html; overlay.classList.remove('hidden'); }
-        function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
-        load();
-    </script>
 </body>
-</html>   
+
+</html>
